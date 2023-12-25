@@ -473,9 +473,21 @@ crypto_libbitcoin_crypto_base_a_SOURCES = \
   crypto/poly1305.cpp \
   crypto/ripemd160.cpp \
   crypto/ripemd160.h \
-  crypto/scrypt.cpp \
-  crypto/scrypt-sse2.cpp \
-  crypto/scrypt.h \
+  crypto/warnings.h \
+  crypto/int-util.h \
+  crypto/hash-ops.h \
+  crypto/keccak.c \
+  crypto/keccak.h \
+  crypto/pow_hash/arm8_neon.hpp \
+  crypto/pow_hash/arm_vfp.hpp \
+  crypto/pow_hash/aux_hash.c \
+  crypto/pow_hash/aux_hash.h \
+  crypto/pow_hash/cn_slow_hash.hpp \
+  crypto/pow_hash/cn_slow_hash_hard_arm.cpp \
+  crypto/pow_hash/cn_slow_hash_hard_intel.cpp \
+  crypto/pow_hash/cn_slow_hash_intel_avx2.cpp \
+  crypto/pow_hash/cn_slow_hash_soft.cpp \
+  crypto/pow_hash/hw_detect.hpp \
   crypto/sha1.cpp \
   crypto/sha1.h \
   crypto/sha256.cpp \
