@@ -26,6 +26,7 @@ These are the dependencies currently used by OpayK Core. You can find instructio
 | xkbcommon |  |  |  |  | [Yes](https://github.com/bitcoin/bitcoin/blob/master/depends/packages/qt.mk) (Linux only) |
 | ZeroMQ | [4.3.1](https://github.com/zeromq/libzmq/releases) | 4.0.0 | No |  |  |
 | zlib | [1.2.11](https://zlib.net/) |  |  |  | No |
+| randomx | [1.1.10](https://github.com/tevador/RandomX/releases) | | | No | |
 
 Controlling dependencies
 ------------------------

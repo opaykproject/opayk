@@ -11,7 +11,7 @@
 bool ComputeFilter(BlockFilterType filter_type, const CBlockIndex* block_index, BlockFilter& filter)
 {
     CBlock block;
-    if (!ReadBlockFromDisk(block, block_index->GetBlockPos(), Params().GetConsensus())) {
+    if (!ReadBlockFromDisk(block, block_index->nHeight, [&block_index](uint32_t height){ return block_index->GetAncestor(height)->GetBlockHash(); }, block_index->GetBlockPos(), Params().GetConsensus())) {
         return false;
     }
 

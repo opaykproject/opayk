@@ -473,9 +473,12 @@ crypto_libbitcoin_crypto_base_a_SOURCES = \
   crypto/poly1305.cpp \
   crypto/ripemd160.cpp \
   crypto/ripemd160.h \
-  crypto/scrypt.cpp \
-  crypto/scrypt-sse2.cpp \
-  crypto/scrypt.h \
+  crypto/progpow/keccak.c \
+  crypto/progpow/keccakf800.c \
+  crypto/progpow/primes.c \
+  crypto/progpow/ethash.cpp \
+  crypto/progpow/progpow.cpp \
+  crypto/randomx/rx.cpp \
   crypto/sha1.cpp \
   crypto/sha1.h \
   crypto/sha256.cpp \
@@ -666,7 +669,7 @@ opayk_bin_ldadd = \
   $(LIBSECP256K1) \
   $(LIBMW)
 
-opayk_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS) $(MWEB_LIBS)
+opayk_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS) $(MWEB_LIBS) $(RANDOMX_LIBS)
 
 opaykd_SOURCES = $(opayk_daemon_sources)
 opaykd_CPPFLAGS = $(opayk_bin_cppflags)

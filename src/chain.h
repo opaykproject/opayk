@@ -252,10 +252,7 @@ public:
      */
     bool HaveTxsDownloaded() const { return nChainTx != 0; }
     
-    uint256 GetBlockPoWHash() const
-    {
-        return GetBlockHeader().GetPoWHash();
-    }
+    uint256 GetBlockPoWHash() const;
 
     int64_t GetBlockTime() const
     {

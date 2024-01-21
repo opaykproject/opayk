@@ -5,6 +5,7 @@
 #ifndef BITCOIN_BLOCKENCODINGS_H
 #define BITCOIN_BLOCKENCODINGS_H
 
+#include "chain.h"
 #include <primitives/block.h>
 
 
@@ -134,10 +135,11 @@ protected:
     std::vector<CTransactionRef> txn_available;
     size_t prefilled_count = 0, mempool_count = 0, extra_count = 0;
     const CTxMemPool* pool;
+    const CBlockIndex* pindex;
 public:
     CBlockHeader header;
     MWEB::Block mweb_block;
-    explicit PartiallyDownloadedBlock(CTxMemPool* poolIn, const MWEB::Block& mweb_blockIn) : pool(poolIn), mweb_block(mweb_blockIn) {}
+    explicit PartiallyDownloadedBlock(CTxMemPool* poolIn, const CBlockIndex* pindex, const MWEB::Block& mweb_blockIn) : pool(poolIn), pindex(pindex), mweb_block(mweb_blockIn) {}
 
     // extra_txn is a list of extra transactions to look at, in <witness hash, reference> form
     ReadStatus InitData(const CBlockHeaderAndShortTxIDs& cmpctblock, const std::vector<std::pair<uint256, CTransactionRef>>& extra_txn);

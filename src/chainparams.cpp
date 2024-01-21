@@ -76,7 +76,7 @@ public:
         consensus.CSVHeight = 0; 
         consensus.SegwitHeight = 0; 
         consensus.MinBIP9WarningHeight = 0; // segwit activation height + miner confirmation window
-        consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powLimit = uint256S("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan =  4 * 60;
         consensus.nPowTargetSpacing = 2 * 60;
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -114,9 +114,9 @@ public:
         m_assumed_blockchain_size = 5;
         m_assumed_chain_state_size = 5;
 
-        genesis = CreateGenesisBlock(1701315386, 112645, 0x1e0ffff0, 1, 50 * COIN);
+        genesis = CreateGenesisBlock(1701315386, 4249874476, 0x2000ffff, 1, 50 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x24a1e7974dc9c260e51763c391ef4207518247efd9edb6b4cee4f4fcd39e4a99"));
+        assert(consensus.hashGenesisBlock == uint256S("0xebd50741a84a145364bf6541788ea06ef8deb707be9df79d8181dab3e2b93ba8"));
         assert(genesis.hashMerkleRoot == uint256S("0xed2d6e3aa53bfb2a887c1417531f199b0c6a1521f28b539dc648931ef556b768"));
 
         // Note that of those which support the service bits prefix, most only support a subset of

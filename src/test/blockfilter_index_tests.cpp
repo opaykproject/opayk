@@ -76,7 +76,13 @@ CBlock BuildChainTestingSetup::CreateBlock(const CBlockIndex* prev,
     unsigned int extraNonce = 0;
     IncrementExtraNonce(&block, prev, extraNonce);
 
-    while (!CheckProofOfWork(block.GetPoWHash(), block.nBits, chainparams.GetConsensus())) ++block.nNonce;
+    while (!CheckProofOfWork(GetPoWHash(block.GetHash(), block.nNonce, prev->nHeight+1, [prev, &block](uint32_t height){
+      if (height == static_cast<uint32_t>(prev->nHeight+1)) {
+        return block.GetHash();
+      }
+      const CBlockIndex* ancestor = prev->GetAncestor(height);
+      return ancestor->GetBlockHeader().GetHash();
+    }), block.nBits, chainparams.GetConsensus())) ++block.nNonce;
 
     return block;
 }

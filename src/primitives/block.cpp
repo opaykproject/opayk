@@ -9,18 +9,12 @@
 #include <tinyformat.h>
 #include <util/strencodings.h>
 #include <crypto/common.h>
-#include <crypto/scrypt.h>
+#include <crypto/progpow/progpow.hpp>
+#include <crypto/randomx/rx.h>
 
 uint256 CBlockHeader::GetHash() const
 {
     return SerializeHash(*this);
-}
-
-uint256 CBlockHeader::GetPoWHash() const
-{
-    uint256 thash;
-    scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
-    return thash;
 }
 
 std::string CBlock::ToString() const
@@ -47,4 +41,19 @@ CTransactionRef CBlock::GetHogEx() const noexcept
     }
 
     return nullptr;
+}
+
+uint256 GetPoWHash(uint256 hash, uint32_t nNonce, uint32_t nHeight, std::function<uint256(uint32_t)> getBlockHash) {
+  uint256 thash;
+  if (nHeight % 2 == 0) {
+    auto context = ethash::create_epoch_context(ethash::get_epoch_number(nHeight));
+    ethash::hash256 header = {};
+    memcpy(header.bytes, hash.data(), 32);
+    auto result = progpow::hash(*context, nHeight, header, nNonce);
+    memcpy(BEGIN(thash), result.final_hash.bytes, 32);
+  } else {
+    uint256 seedhash = getBlockHash(nHeight);
+    rx_slow_hash(BEGIN(seedhash), hash.data(), hash.size(), BEGIN(thash));
+  }
+  return thash;
 }

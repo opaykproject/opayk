@@ -4,6 +4,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <chain.h>
+#include <cstdint>
 
 /**
  * CChain implementation
@@ -117,6 +118,10 @@ void CBlockIndex::BuildSkip()
 {
     if (pprev)
         pskip = pprev->GetAncestor(GetSkipHeight(nHeight));
+}
+
+uint256 CBlockIndex::GetBlockPoWHash() const {
+    return GetPoWHash(GetBlockHeader().GetHash(), nNonce, nHeight, [this](uint32_t height){ return this->GetAncestor(height)->GetBlockHeader().GetHash(); });
 }
 
 arith_uint256 GetBlockProof(const CBlockIndex& block)
