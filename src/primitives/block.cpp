@@ -17,6 +17,31 @@ uint256 CBlockHeader::GetHash() const
     return SerializeHash(*this);
 }
 
+uint256 CBlockHeader::GetPoWHash(uint32_t nHeight, std::function<uint256(uint32_t)> getBlockHash) {
+  uint256 thash;
+  if (nHeight % 2 == 0) {
+    CBlockHeader header;
+    header.nVersion       = nVersion;
+    header.hashPrevBlock  = hashPrevBlock;
+    header.hashMerkleRoot = hashMerkleRoot;
+    header.nTime          = nTime;
+    header.nBits          = nBits;
+    header.nNonce         = 0;
+    uint256 hash = header.GetHash();
+    auto context = ethash::create_epoch_context(ethash::get_epoch_number(nHeight));
+    ethash::hash256 header_hash = {};
+    memcpy(header_hash .bytes, hash.data(), 32);
+    auto result = progpow::hash(*context, nHeight, header_hash, nNonce);
+    for (int i=0; i<32; ++i)
+      thash.data()[i] = result.final_hash.bytes[31-i];
+  } else {
+    uint256 hash = GetHash();
+    uint256 seedhash = getBlockHash(rx_seedheight(nHeight));
+    rx_slow_hash(BEGIN(seedhash), hash.data(), hash.size(), BEGIN(thash));
+  }
+  return thash;
+}
+
 std::string CBlock::ToString() const
 {
     std::stringstream s;
@@ -41,19 +66,4 @@ CTransactionRef CBlock::GetHogEx() const noexcept
     }
 
     return nullptr;
-}
-
-uint256 GetPoWHash(uint256 hash, uint32_t nNonce, uint32_t nHeight, std::function<uint256(uint32_t)> getBlockHash) {
-  uint256 thash;
-  if (nHeight % 2 == 0) {
-    auto context = ethash::create_epoch_context(ethash::get_epoch_number(nHeight));
-    ethash::hash256 header = {};
-    memcpy(header.bytes, hash.data(), 32);
-    auto result = progpow::hash(*context, nHeight, header, nNonce);
-    memcpy(BEGIN(thash), result.final_hash.bytes, 32);
-  } else {
-    uint256 seedhash = getBlockHash(nHeight);
-    rx_slow_hash(BEGIN(seedhash), hash.data(), hash.size(), BEGIN(thash));
-  }
-  return thash;
 }

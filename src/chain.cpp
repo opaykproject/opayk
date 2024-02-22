@@ -121,7 +121,7 @@ void CBlockIndex::BuildSkip()
 }
 
 uint256 CBlockIndex::GetBlockPoWHash() const {
-    return GetPoWHash(GetBlockHeader().GetHash(), nNonce, nHeight, [this](uint32_t height){ return this->GetAncestor(height)->GetBlockHeader().GetHash(); });
+    return GetBlockHeader().GetPoWHash(nHeight, [this](uint32_t height){ return this->GetAncestor(height)->GetBlockHeader().GetHash(); });
 }
 
 arith_uint256 GetBlockProof(const CBlockIndex& block)

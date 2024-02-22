@@ -1192,7 +1192,7 @@ bool ReadBlockFromDisk(CBlock& block, uint32_t height, std::function<uint256(uin
     }
 
     // Check the header
-    if (!CheckProofOfWork(GetPoWHash(block.GetHash(), block.nNonce, height, getBlockHash), block.nBits, consensusParams))
+    if (!CheckProofOfWork(block.GetPoWHash(height, getBlockHash), block.nBits, consensusParams))
         return error("ReadBlockFromDisk: Errors in block header at %s", pos.ToString());
 
     // Signet only: check block solution

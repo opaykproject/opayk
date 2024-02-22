@@ -53,13 +53,13 @@ public:
 
     uint256 GetHash() const;
 
+    uint256 GetPoWHash(uint32_t nHeight, std::function<uint256(uint32_t)> getBlockHash);
+
     int64_t GetBlockTime() const
     {
         return (int64_t)nTime;
     }
 };
-
-uint256 GetPoWHash(uint256 hash, uint32_t nNonce, uint32_t nHeight, std::function<uint256(uint32_t)> getBlockHash);
 
 class CBlock : public CBlockHeader
 {

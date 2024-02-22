@@ -11,6 +11,7 @@
 #include <consensus/params.h>
 #include <consensus/validation.h>
 #include <core_io.h>
+#include <crypto/randomx/rx.h>
 #include <key_io.h>
 #include <miner.h>
 #include <net.h>
@@ -117,7 +118,8 @@ static bool GenerateBlock(ChainstateManager& chainman, CBlock& block, uint64_t& 
 
     CChainParams chainparams(Params());
 
-    while (max_tries > 0 && block.nNonce < std::numeric_limits<uint32_t>::max() && !CheckProofOfWork(GetPoWHash(block.GetHash(), block.nNonce, chainman.ActiveHeight(), [&chainman](uint32_t height){ return chainman.ActiveTip()->GetAncestor(height)->GetBlockHash(); }), block.nBits, chainparams.GetConsensus()) && !ShutdownRequested()) {
+    uint32_t height = chainman.ActiveHeight() + 1;
+    while (max_tries > 0 && block.nNonce < std::numeric_limits<uint32_t>::max() && !CheckProofOfWork(block.GetPoWHash(height, [&chainman](uint32_t height){ return chainman.ActiveTip()->GetAncestor(height)->GetBlockHash(); }), block.nBits, chainparams.GetConsensus()) && !ShutdownRequested()) {
         ++block.nNonce;
         --max_tries;
     }
@@ -900,7 +902,10 @@ static RPCHelpMan getblocktemplate()
     }
     result.pushKV("curtime", pblock->GetBlockTime());
     result.pushKV("bits", strprintf("%08x", pblock->nBits));
-    result.pushKV("height", (int64_t)(pindexPrev->nHeight+1));
+    int height = pindexPrev->nHeight+1;
+    result.pushKV("height", (int64_t)(height));
+
+    result.pushKV("seedhash", HexStr(pindexPrev->GetAncestor(rx_seedheight(height))->GetBlockHash()));
 
     if (!pblocktemplate->vchCoinbaseCommitment.empty()) {
         result.pushKV("default_witness_commitment", HexStr(pblocktemplate->vchCoinbaseCommitment));

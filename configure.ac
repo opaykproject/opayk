@@ -1413,6 +1413,7 @@ fi
 
 AC_CHECK_LIB([fmt],[main],MWEB_LIBS=-lfmt,AC_MSG_ERROR(libfmt missing))
 
+AC_CHECK_HEADER([randomx.h],,AC_MSG_ERROR(randomx headers missing))
 AC_CHECK_LIB([randomx], [randomx_get_flags], [], [
     AC_MSG_ERROR([randomx missing])
 ])

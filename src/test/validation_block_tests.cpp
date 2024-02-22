@@ -106,7 +106,7 @@ std::shared_ptr<CBlock> MinerTestingSetup::FinalizeBlock(std::shared_ptr<CBlock>
       }
       return getOlderBlockHash(height);
     };
-    while (!CheckProofOfWork(GetPoWHash(pblock->GetHash(), pblock->nNonce, nHeight, getBlockHash), pblock->nBits, Params().GetConsensus())) {
+    while (!CheckProofOfWork(pblock->GetPoWHash(nHeight, getBlockHash), pblock->nBits, Params().GetConsensus())) {
         ++(pblock->nNonce);
     }
 
